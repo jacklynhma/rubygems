@@ -56,8 +56,8 @@ module Bundler
 
       def checksums
         lines(versions_path).each_with_object({}) do |line, checksums|
-          name_end = line.index(SPACE)
-          checksum_start = line.index(SPACE, name_end + 1) + 1
+          name_end = line.index(" ")
+          checksum_start = line.index(" ", name_end + 1) + 1
           
           name = line[0, name_end]
           checksums[name] = line[checksum_start..-1]
@@ -86,8 +86,6 @@ module Bundler
       end
 
       private
-
-      SPACE = " ".freeze
 
       def mkdir(dir)
         SharedHelpers.filesystem_access(dir) do
