@@ -69,8 +69,6 @@ module Bundler
           checksum = line[checksum_start, checksum_end]
           checksums[name] = checksum
         end
-
-        checksums
       end
 
       def dependencies(name)
