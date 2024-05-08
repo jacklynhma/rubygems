@@ -62,7 +62,6 @@ module Bundler
           name_end = line.index(" ")
           checksum_start = line.index(" ", name_end + 1) + 1
           checksum_end = line.size - checksum_start
-  
           # freeze name since it is used as a hash key, pre-freezing
           # means a frozen copy isn't created
           name = line[0, name_end].freeze
