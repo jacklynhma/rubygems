@@ -56,11 +56,18 @@ module Bundler
 
       def checksums
         lines(versions_path).each_with_object({}) do |line, checksums|
+          # allows slicing into the string to not allocate a copy
+          # of the line
+          line.freeze
           name_end = line.index(" ")
           checksum_start = line.index(" ", name_end + 1) + 1
-          
-          name = line[0, name_end]
-          checksums[name] = line[checksum_start..-1]
+          checksum_end = line.size - checksum_start
+  
+          # freeze name since it is used as a hash key, pre-freezing
+          # means a frozen copy isn't created
+          name = line[0, name_end].freeze
+          checksum = line[checksum_start, checksum_end]
+          checksums[name] = checksum
         end
       end
 
