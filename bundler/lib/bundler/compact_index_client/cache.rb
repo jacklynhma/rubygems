@@ -55,14 +55,13 @@ module Bundler
       end
 
       def checksums
-        checksums = {}
-
-        lines(versions_path).each do |line|
-          name, _, checksum = line.split(" ", 3)
-          checksums[name] = checksum
+        lines(versions_path).each_with_object({}) do |line, checksums|
+          name_end = line.index(SPACE)
+          checksum_start = line.index(SPACE, name_end + 1) + 1
+          
+          name = line[0, name_end]
+          checksums[name] = line[checksum_start..-1]
         end
-
-        checksums
       end
 
       def dependencies(name)
@@ -87,6 +86,8 @@ module Bundler
       end
 
       private
+
+      SPACE = " ".freeze
 
       def mkdir(dir)
         SharedHelpers.filesystem_access(dir) do
